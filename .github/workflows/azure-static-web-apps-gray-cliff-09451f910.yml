@@ -18,9 +18,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Build And Deploy
+      - name: Build
+        run: |
+          npm install && npx next build
+          npm prune --production
+      - name: Deploy
         id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
+        uses: sarsharma/staticstiesactionoryx@master
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_CLIFF_09451F910 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
@@ -30,6 +34,7 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "" # Built app content directory - optional
+          skip_api_build: true
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
@@ -39,7 +44,7 @@ jobs:
     steps:
       - name: Close Pull Request
         id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
+        uses: sarsharma/staticstiesactionoryx@master
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_CLIFF_09451F910 }}
           action: "close"
